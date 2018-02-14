@@ -1,7 +1,7 @@
 #! /bin/bash
 #Get the location that the user wants entered into the first cell
 read -p "Please enter your location: " location
-if [ "$location" == "" ]
+if [ "$location" -eq "" ]
 then
 	echo "Invalid location"
 	exit -1
