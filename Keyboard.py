@@ -34,6 +34,13 @@ class Keyboard():
       return keys[self.rows.index(row)][self.cols.index(col)]
    def getPin(self, length=3):
       vals=''
-      for i in range(0,length):
-          vals+=self.getKey()
+      while len(vals) < length:
+         key=self.getKey()
+         if key=='#':
+            vals=vals[:-1]
+         elif key == '*':
+            vals=""
+         else:
+            print key
+            vals+=key
       return vals
