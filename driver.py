@@ -6,6 +6,7 @@ In this application, interrupts are triggered by button presses according to the
 
 Initialization State:
 	All global variables are initialized
+	Location is read from location file if one exists
 	All imports are made
 	All interrupts are registered
 
@@ -86,6 +87,6 @@ logging.basicConfig(filename='scanner.log', level=logging.DEBUG)
 
 def launchScanner():
 	
-def launchWriter():
+def launchLocationReader():
 
 def launchRegistration():	
