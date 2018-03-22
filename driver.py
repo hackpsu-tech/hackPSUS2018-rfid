@@ -75,6 +75,7 @@ except ImportError:
 #import hackpsuRFID as rfid
 #import hackpsuKEYPAD as keypad
 #import hackpsuREDIS as redis
+#import hackpsuCONFIG as config
 	
 #Prevent warnings from reusing IO ports
 GPIO.setwarnings(False)
@@ -82,8 +83,15 @@ GPIO.setwarnings(False)
 #Change to logging.WARNING or ERROR for release
 logging.basicConfig(filename='scanner.log', level=logging.DEBUG)
 	
+#TODO
 #register mode switch interrupts
-#GPIO.add_event_detect(pin, rising/falling edge, handlerFunctoin	
+#GPIO.add_event_detect(pin, rising/falling edge, handlerFunction)
+
+#TODO
+#Load information from config file
+
+#Launch into the scanner mode
+launchScanner()
 
 def launchScanner():
 	
