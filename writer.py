@@ -14,25 +14,29 @@ The general use is:
 	goto Start Program
 """
 
-#TODO
-#import hackpsu.RFID
-
-#TODO
-#Load keys from config file
+import HackPSUrfid as rfid
+import time
 
 #raw_input for py2 or input for py3
 while True:
+	print("Please place wristband on scanner")
 	location = input("Enter a location ID")
 	print("Location registered as: " + location)
 	print("Please scan an RFID tag now")
 	
-	#TODO
-	#uid = RFID.getUID
-	#RFID.target(uid)
-	#RFID.authenticated(key)
-	#RFID.write(location.encode)
-	#readBack = RFID.read()
-	#RFID.clearTarget
+	if not detectBand():
+		continue
+		
+	uid = rfid.getUID()
+	print("Writing to UID: " + uid)
 	
-	#print("Write success; wrote: " + readBack.decode)
+	oldLoc = rfid.readLocation()
+	print("Old location string: " + oldLoc)
+	
+	rfid.writeLocation(location)
+	
+	newLoc = rfid.readLocation()
+	print("New location string: " + newLoc)
+	
 	print("Please remove wristband")
+	time.sleep(1)

@@ -2,7 +2,7 @@
 This module provides an interface for reading and writing to a HackPSU RaspberryPi Scanner config file
 
 Methods:
-        getProperty(configFile, prop)
+	getProperty(configFile, prop)
 		Get a property from a config file by reading the config file until the desired property is found
 	setProperty(configFile, prop, value)
 		Set a property by updating the config file (requries a total rewrite of the config file)

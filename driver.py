@@ -80,6 +80,7 @@ except ImportError:
 #Prevent warnings from reusing IO ports
 GPIO.setwarnings(False)
 
+#TODO
 #Change to logging.WARNING or ERROR for release
 logging.basicConfig(filename='scanner.log', level=logging.DEBUG)
 	
