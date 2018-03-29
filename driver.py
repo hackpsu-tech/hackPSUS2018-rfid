@@ -17,7 +17,7 @@ Event Scanning State:
 	Receive response from redis server
 	Display data from redis response to LCD
 	repeat
-	
+
 Location Reading State:
 	Scan wristband
 	If new scan, continue, else repeat
@@ -25,7 +25,7 @@ Location Reading State:
 	Read sectors to get location from wristband
 	Update location file
 	repeat
-	
+
 Registration Scanning State:
 	Get user PIN
 	Query redis server to receive Name & Shirt Size
@@ -61,6 +61,7 @@ Fired     ||        Registration Interrupt Fired |                |
 """
 
 import time
+import calendar
 import threaing
 import logging
 
@@ -72,11 +73,70 @@ except ImportError:
 
 #TODO: import all HackPSU abstraction modules
 #import hackpsuLCD as lcd
-#import hackpsuRFID as rfid
+import hackpsuRFID as rfid
 #import hackpsuKEYPAD as keypad
-#import hackpsuREDIS as redis
-#import hackpsuCONFIG as config
+import hackpsuREDIS as redis
+import hackpsuCONFIG as config
+
+configurationDictionary = {"location":""}
 	
+#Funtion definitions for states (goto <lineNum> for init code)
+def launchScanner():
+	lastUID = None
+	while True:
+		#Wait until band is detected
+		uid = None
+		print("Waiting for scan")
+		while not rfid.detectBand()):
+			pass
+		print("Scanning")
+		#Get UID, skip scan if same as last
+		uid = rfid.getUID()
+		if uid is lastUID:
+			continue
+		print("UID: " + uid)
+		#Tell redis who scanned, when, and where
+		timestamp = calendar.timegm(time.gmtime())
+		location = configurationDictionary["location"]
+		redis.postScan(uid, timestamp, location)
+		result = redis.recvScanResult()
+		print("Result: " + result)
+		lastUID = uid
+		#Do we want to sleep/clear?
+
+def launchLocationReader():
+	lastUID = None
+	while True:
+		uid = None
+		print("Waiting for scan")
+		while not rfid.detectBand():
+			pass
+		print("Scanning")
+		loc = rfid.readLocation()
+		configurationDictionary["location"] = loc
+		print("Location changed to " + loc)
+		lastUID = uid
+
+def launchRegistration():	
+	lastUID = None
+	while True:
+		uid = None
+		print("Enter 4 digit pin")
+		pin = ""
+		for i in range(4)
+			pin.join(keypad.getKey())
+		(name, size) = redis.postPin(pin)
+		print("name: " + name)
+		print("size: " + size)
+		print("Waiting for scan")
+		while not rfid.detectBand():
+			pass
+		print("Scanned")
+		uid = rfid.getUID()
+		resp = redis.postRegistration(pin, uid)
+		print("Response: " + resp)
+		lastUID = uid
+		
 #Prevent warnings from reusing IO ports
 GPIO.setwarnings(False)
 
@@ -93,9 +153,3 @@ logging.basicConfig(filename='scanner.log', level=logging.DEBUG)
 
 #Launch into the scanner mode
 launchScanner()
-
-def launchScanner():
-	
-def launchLocationReader():
-
-def launchRegistration():	
