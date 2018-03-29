@@ -14,6 +14,7 @@ Methods:
 """
 import sys
 import io
+import MFRC522
 reader = MFRC522.MFRC522()
 locationSector = 8
 
@@ -32,7 +33,7 @@ def detectBand():
 	if status == reader.MI_OK:
 		return True
 	return False
-	
+
 def getUID():
 	"""
 	str getUID ( void )
@@ -51,8 +52,8 @@ def getUID():
 		raise ValueError('No rfid tag detected')
 	value = "{uid1},{uid2},{uid3},{uid4}".format(uid1=uid[0], uid2=uid[1], uid3=uid[2], uid4=uid[3])
 	return value
-	
-def readLocation:
+
+def readLocation():
 	"""
 	str readLocation ( void )
 	
@@ -67,7 +68,7 @@ def readLocation:
 	buffer = [0] * 4
 	buffer[0] = reader.PICC_READ
 	buffer[1] = locationSector
-	pOut = reader.CalculateCRC(buffer)
+	pOut = reader.CalulateCRC(buffer)
 	buffer[2] = pOut[0]
 	buffer[3] = pOut[1]
 	(status, backData, backLen) = reader.MFRC522_ToCard(reader.PCD_TRANSCEIVE, buffer)
@@ -76,7 +77,7 @@ def readLocation:
 	if not (len(backData) == 16):
 		raise ValueError('Incorrect number of bytes read')
 	return backData.decode()
-	
+
 def writeLocation(location):
 	"""
 	void writeLocation ( location:str )

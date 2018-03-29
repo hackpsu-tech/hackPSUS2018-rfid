@@ -20,11 +20,11 @@ import time
 #raw_input for py2 or input for py3
 while True:
 	print("Please place wristband on scanner")
-	location = input("Enter a location ID")
+	location = raw_input("Enter a location ID: ")
 	print("Location registered as: " + location)
 	print("Please scan an RFID tag now")
 	
-	if not detectBand():
+	if not rfid.detectBand():
 		continue
 		
 	uid = rfid.getUID()
