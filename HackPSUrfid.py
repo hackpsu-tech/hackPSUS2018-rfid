@@ -51,7 +51,7 @@ def getUID():
 	"""
 	status = None
 	while not (status == reader.MI_OK):
-		(status,TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
+		(status,TagType) = reader.MFRC522_Request(reader.PICC_REQIDL)
 	(status, uid) = reader.MFRC522_Anticoll()
 	if not (status == reader.MI_OK):
 		raise ValueError('No rfid tag detected')
@@ -70,8 +70,9 @@ def readLocation():
 	Raises:
 		ValueError: This will be raised if no wristband is available or the wrong amount of data is returned
 	"""
+	status = None
 	while not (status == reader.MI_OK):
-		(status,TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
+		(status,TagType) = reader.MFRC522_Request(reader.PICC_REQIDL)
 	(status, uid) = reader.MFRC522_Anticoll()
 	if not (status == reader.MI_OK):
 		raise ValueError('No rfid tag detected')
@@ -97,8 +98,9 @@ def writeLocation(location):
 	Raises:
 		ValueError if there is no wristband available or the location is longer than 16 chars in length
 	"""
+	status = None
 	while not (status == reader.MI_OK):
-		(status,TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
+		(status,TagType) = reader.MFRC522_Request(reader.PICC_REQIDL)
 	(status, uid) = reader.MFRC522_Anticoll()
 	if not (status == reader.MI_OK):
 		raise ValueError('No rfid tag detected')
@@ -106,7 +108,9 @@ def writeLocation(location):
 	reader.MFRC522_Auth(reader.PICC_AUTHENT1A, 8, key, uid)
 	if len(location) > 16:
 		raise ValueError('Location string is too long')
-	buffer = location.encode()
+	buffer = [ord(c) for c in location]
+	while len(buffer) < 16:
+		buffer.append(0)
 	tmp_out = sys.stdout
 	sys.stdout = io.BytesIO()
 	reader.MFRC522_Write(locationSector, buffer)
