@@ -1,0 +1,6 @@
+One key value pair per line like below
+<key>=<value>
+
+Comments begin with #
+Comments may not appear after a key value pair; the line below is interpreted as 'name':'dave #It is my name' not as 'name':'dave'
+name=dave #It is my name
