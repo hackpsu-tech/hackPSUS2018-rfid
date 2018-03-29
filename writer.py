@@ -24,8 +24,8 @@ while True:
 	print("Location registered as: " + location)
 	print("Please scan an RFID tag now")
 	
-	if not rfid.detectBand():
-		continue
+	while not rfid.detectBand():
+		pass
 		
 	uid = rfid.getUID()
 	print("Writing to UID: " + uid)

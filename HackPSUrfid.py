@@ -69,20 +69,14 @@ def readLocation():
 	"""
 	(status, uid) = reader.MFRC522_Anticoll()
 	reader.MFRC522_SelectTag(uid)
-	reader.MFRC522_auth(reader.PICC_AUTHENT1A, 8, key, uid)
-	buffer = [0] * 4
-	buffer[0] = reader.PICC_READ
-	buffer[1] = locationSector
-	pOut = reader.CalulateCRC(buffer)
-	buffer[2] = pOut[0]
-	buffer[3] = pOut[1]
-	(status, backData, backLen) = reader.MFRC522_ToCard(reader.PCD_TRANSCEIVE, buffer)
-	if not (status == reader.MI_OK):
-		raise ValueError('No tag detected')
-	if not (len(backData) == 16):
-		raise ValueError('Incorrect number of bytes read')
+	reader.MFRC522_Auth(reader.PICC_AUTHENT1A, 8, key, uid)
+	tmpOut = sys.stdout
+	sys.stdout = io.BytesIO()
+	reader.MFRC522_Read(locationSector)
+	output = sys.stdout.getvalue()
+	sys.stdout = tmpOut
 	reader.MFRC522_StopCrypto1()
-	return backData.decode()
+	return output
 
 def writeLocation(location):
 	"""
@@ -98,13 +92,10 @@ def writeLocation(location):
 	"""
 	(status, uid) = reader.MFRC522_Anticoll()
 	reader.MFRC522_SelectTag(uid)
-	reader.MFRC522_auth(reader.PICC_AUTHENT1A, 8, key, uid)
+	reader.MFRC522_Auth(reader.PICC_AUTHENT1A, 8, key, uid)
 	if len(location) > 16:
 		raise ValueError('Location string is too long')
 	buffer = location.encode()
-	zeros = len(location) - 16
-	for i in range(zeros):
-		buffer.append(0)
 	tmp_out = sys.stdout
 	sys.stdout = io.BytesIO()
 	reader.MFRC522_Write(locationSector, buffer)
