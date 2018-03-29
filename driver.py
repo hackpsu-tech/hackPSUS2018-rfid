@@ -98,8 +98,7 @@ def launchScanner():
 		#Tell redis who scanned, when, and where
 		timestamp = calendar.timegm(time.gmtime())
 		location = configurationDictionary["location"]
-		redis.postScan(uid, timestamp, location)
-		result = redis.recvScanResult()
+		result = redis.postScan(uid, timestamp, location)
 		print("Result: " + result)
 		lastUID = uid
 		#Do we want to sleep/clear?
