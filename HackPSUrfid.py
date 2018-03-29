@@ -14,6 +14,7 @@ Methods:
 """
 import sys
 import io
+import json
 import MFRC522
 
 reader = MFRC522.MFRC522()
@@ -65,7 +66,7 @@ def readLocation():
 	Detect the first available rfid tag and get the data from the locationSector
 	
 	Returns:
-		location: A string from the data back from the tag
+		strOut: A string from the data back from the tag
 		
 	Raises:
 		ValueError: This will be raised if no wristband is available or the wrong amount of data is returned
@@ -83,7 +84,11 @@ def readLocation():
 	output = sys.stdout.getvalue()
 	sys.stdout = tmpOut
 	reader.MFRC522_StopCrypto1()
-	return output
+	arrLoc = output.index("[")
+	output = output[arrLoc:]
+	obj = json.loads(output)
+	strOut = "".join(chr(i) for i in obj)
+	return strOut
 
 def writeLocation(location):
 	"""
