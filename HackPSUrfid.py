@@ -15,8 +15,10 @@ Methods:
 import sys
 import io
 import MFRC522
+
 reader = MFRC522.MFRC522()
 locationSector = 8
+key = [0xFF,0xFF,0xFF,0xFF,0xFF,0xFF]
 
 def detectBand():
 	"""
@@ -65,6 +67,9 @@ def readLocation():
 	Raises:
 		ValueError: This will be raised if no wristband is available or the wrong amount of data is returned
 	"""
+	(status, uid) = reader.MFRC522_Anticoll()
+	reader.MFRC522_SelectTag(uid)
+	reader.MFRC522_auth(reader.PICC_AUTHENT1A, 8, key, uid)
 	buffer = [0] * 4
 	buffer[0] = reader.PICC_READ
 	buffer[1] = locationSector
@@ -76,6 +81,7 @@ def readLocation():
 		raise ValueError('No tag detected')
 	if not (len(backData) == 16):
 		raise ValueError('Incorrect number of bytes read')
+	reader.MFRC522_StopCrypto1()
 	return backData.decode()
 
 def writeLocation(location):
@@ -90,6 +96,9 @@ def writeLocation(location):
 	Raises:
 		ValueError if there is no wristband available or the location is longer than 16 chars in length
 	"""
+	(status, uid) = reader.MFRC522_Anticoll()
+	reader.MFRC522_SelectTag(uid)
+	reader.MFRC522_auth(reader.PICC_AUTHENT1A, 8, key, uid)
 	if len(location) > 16:
 		raise ValueError('Location string is too long')
 	buffer = location.encode()
@@ -100,3 +109,5 @@ def writeLocation(location):
 	sys.stdout = io.BytesIO()
 	reader.MFRC522_Write(locationSector, buffer)
 	sys.stdout = tmp_out
+	reader.MFRC522_StopCrypto1()
+
