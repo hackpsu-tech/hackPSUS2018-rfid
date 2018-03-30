@@ -1,8 +1,6 @@
 """
 HackPSU Abstractions for communicating with the Redis cache via http using requests
 
-@Julia please implement this bitch and maybe doc your method up here and put the redis url up here?
-
 Requires requests (pip install requests)
 """
 import requests
@@ -25,12 +23,15 @@ def postRegistration(url,uid, pin):
 	return ""
 	
 def postPin(url,pin):
-	responseName = requests.get(url+"/tabs/name")
-	responseShirt = requests.get(url+"/tabs/shirtSize")
-	dataName = responseName.json()
-	dataShirt = repsonseShirt.json()
-	name = dataName["data"]
-	size = dataShirt["data"]
+	repsonse = requests.post(url+"/tabs/getpin", data = {"pin":pin})
+	data = response.json()
+	status = response.status_code
+	if status == "500":
+		return "Error"
+	else:
+		shirt = data["data"]["shirtShirt"]
+		name = data["data"]["name"]
+		return (name,size)
 	"""
 	(name:str, size:str) postPin (pin:str)
 	
@@ -43,7 +44,7 @@ def postPin(url,pin):
 		name: The user's first and last name as a string
 		size: The user's shirt size as a string
 	"""
-	return (name,size)
+	
 	
 def postScan(url,uid, timestamp, location):
 	r = requests.post(url+"/tabs/add", data={"uid": uid, "timestamp": timestamp, "location":location})
