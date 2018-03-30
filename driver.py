@@ -124,13 +124,12 @@ def launchLocationReader():
 def launchRegistration():	
 	lastUID = None
 	while True:
-		print(str(GPIO.getmode()))
 		uid = None
 		lcd.printMsg("Enter 4 digit pin")
 		pin = keypad.getPin()
 		lcd.printMsg("Pin: " + pin)
 		(name, size) = redis.postPin(configurationDictionary["redisLocation"], pin)
-		lcd.printname(name)
+		lcd.printName(name)
 		
 		key = None
 		while not (key == "#" or key == "*"):
@@ -147,7 +146,7 @@ def launchRegistration():
 		lcd.printMsg("Scanned")
 		uid = rfid.getUID()
 		resp = redis.postRegistration(configurationDictionary["redisLocation"], pin, uid)
-		printRegisterd(resp)
+		lcd.printRegistered(resp)
 		lastUID = uid
 		
 #Prevent warnings from reusing IO ports
