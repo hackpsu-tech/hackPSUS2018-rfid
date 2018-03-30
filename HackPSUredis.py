@@ -31,7 +31,7 @@ def postPin(url,pin):
 	if status == "500":
 		return "Error"
 	else:
-		shirt = data["data"]["shirtShirt"]
+		shirt = data["data"]["shirtSize"]
 		name = data["data"]["name"]
 		return (name,size)
 	"""
