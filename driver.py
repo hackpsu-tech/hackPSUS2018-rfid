@@ -77,63 +77,78 @@ import HackPSUrfid as rfid
 import HackPSUkeypad
 import HackPSUredis as redis
 import HackPSUconfig as config
+import HackPSUfauxlcd as lcd
 
 configurationDictionary = {"location":""}
 keypad = HackPSUkeypad()
+	
+def getWifi():
+	return "XXX%"
 	
 #Funtion definitions for states (goto <lineNum> for init code)
 def launchScanner():
 	lastUID = None
 	while True:
+		lcd.printDebug(configurationDictionary["location"], getWifi())
 		#Wait until band is detected
 		uid = None
-		print("Waiting for scan")
+		lcd.printMsg("Waiting...")
 		while not rfid.detectBand()):
 			pass
-		print("Scanning")
+		lcd.printMsg("Detected Wristband")
 		#Get UID, skip scan if same as last
 		uid = rfid.getUID()
 		if uid is lastUID:
 			continue
-		print("UID: " + uid)
+		lcd.printMsg("Scanned Wristband")
 		#Tell redis who scanned, when, and where
 		timestamp = calendar.timegm(time.gmtime())
 		location = configurationDictionary["location"]
 		result = redis.postScan(uid, timestamp, location)
-		print("Result: " + result)
+		lcd.printScan(result)
 		lastUID = uid
 		#Do we want to sleep/clear?
 
 def launchLocationReader():
 	lastUID = None
 	while True:
+		lcd.printDebug(configurationDictionary["location"], getWifi())
 		uid = None
-		print("Waiting for scan")
+		lcd.printMsg("Waiting...")
 		while not rfid.detectBand():
 			pass
-		print("Scanning")
+		lcd.printMsg("Detected Wristband")
 		loc = rfid.readLocation()
 		configurationDictionary["location"] = loc
-		print("Location changed to " + loc)
+		lcd.printLocation(loc)
 		lastUID = uid
 
 def launchRegistration():	
 	lastUID = None
 	while True:
 		uid = None
-		print("Enter 4 digit pin")
+		lcd.printMsg("Enter 4 digit pin")
 		pin = keypad.getPin()
-		print("Pin: " pin)
+		lcd.printMsg("Pin: " pin)
 		(name, size) = redis.postPin(pin)
-		print("name: " + name)
-		print("size: " + size)
-		print("Waiting for scan")
+		lcd.printname(name)
+		
+		key = None
+		while not (key == "#" or key == "*"):
+			key = keypad.getKey()
+			
+		if key == "#":
+			continue
+		
+		lcd.printDebug(configurationDictionary["location"], getWifi())
+		lcd.printSize(size)
+		
 		while not rfid.detectBand():
 			pass
-		print("Scanned")
+		lcd.printMsg("Scanned")
 		uid = rfid.getUID()
 		resp = redis.postRegistration(pin, uid)
-		print("Response: " + resp)
+		printRegisterd(resp)
 		lastUID = uid
 		
 #Prevent warnings from reusing IO ports

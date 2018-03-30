@@ -52,4 +52,4 @@ def postScan(uid, timestamp, location):
 	Returns:
 		result:	Something with at least 3 states for results, just doc their meanings
 	"""
-	return ""
+	return "Y/N"
