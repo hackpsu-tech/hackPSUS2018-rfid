@@ -9,9 +9,7 @@ import requests
 
 def postRegistration(url,uid, pin):
 	r = requests.post(url+"/tabs/setup", data={"id": uid, "pin": pin})
-	code = r.status_code
-
-	if code == "200":
+	if r.status_code == requests.codes.ok :
 		return "Y"
 	else:
 		return "N"
@@ -33,13 +31,12 @@ def postRegistration(url,uid, pin):
 def postPin(url,pin):
 	response = requests.post(url+"/tabs/getpin", data = {"pin":pin})
 	data = response.json()
-	status = response.status_code
-	if status == "500":
-		return "Error"
-	else:
+	if response.status_code == requests.codes.ok:
 		shirt = data["data"]["shirtSize"]
 		name = data["data"]["name"]
 		return (name,shirt)
+	else:
+		return "Error"
 	"""
 	(name:str, size:str) postPin (pin:str)
 	
@@ -56,9 +53,8 @@ def postPin(url,pin):
 	
 def postScan(url,uid, timestamp, location):
 	r = requests.post(url+"/tabs/add", data={"id": uid, "timestamp": timestamp, "location":location})
-	code = r.status_code
 
-	if code == "200":
+	if r.status_code == requests.codes.ok:
 		return "Y"
 	else:
 		return "N"
