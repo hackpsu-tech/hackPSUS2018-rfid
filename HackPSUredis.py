@@ -33,7 +33,7 @@ def postPin(url,pin):
 	else:
 		shirt = data["data"]["shirtSize"]
 		name = data["data"]["name"]
-		return (name,size)
+		return (name,shirt)
 	"""
 	(name:str, size:str) postPin (pin:str)
 	
