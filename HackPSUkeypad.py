@@ -44,6 +44,6 @@ class HackPSUkeypad():
          elif key == '*':
             vals=""
          else:
-            print key
+            #print key
             vals+=key
       return vals
