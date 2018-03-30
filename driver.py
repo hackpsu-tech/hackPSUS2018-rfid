@@ -78,9 +78,6 @@ import HackPSUkeypad
 import HackPSUredis as redis
 import HackPSUconfig as config
 import HackPSUfauxlcd as lcd
-
-configurationDictionary = {"location":""}
-keypad = HackPSUkeypad()
 	
 def getWifi():
 	return "XXX%"
@@ -166,4 +163,6 @@ logging.basicConfig(filename='scanner.log', level=logging.DEBUG)
 #Load information from config file
 
 #Launch into the scanner mode
+configurationDictionary = config.getProperties("pi.cfg")
+keypad = HackPSUkeypad()
 launchScanner()
