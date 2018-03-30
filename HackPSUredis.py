@@ -8,7 +8,7 @@ Requires requests (pip install requests)
 import requests
 
 def postRegistration(url,uid, pin):
-	r = requests.post(url+"/tabs/setup", data={"uid": uid, "pin": pin})
+	r = requests.post(url+"/tabs/setup", data={"id": uid, "pin": pin})
 	code = r.status_code
 
 	if code == "200":
@@ -55,7 +55,7 @@ def postPin(url,pin):
 	
 	
 def postScan(url,uid, timestamp, location):
-	r = requests.post(url+"/tabs/add", data={"uid": uid, "timestamp": timestamp, "location":location})
+	r = requests.post(url+"/tabs/add", data={"id": uid, "timestamp": timestamp, "location":location})
 	code = r.status_code
 
 	if code == "200":
