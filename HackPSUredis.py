@@ -9,6 +9,12 @@ import requests
 
 def postRegistration(url,uid, pin):
 	requests.post(url+"/tabs/setup", data={"uid": uid, "pin": pin})
+	code = r.status_code
+
+	if code == "200":
+		return "Y"
+	else:
+		return "N"
 	"""
 	(response:?) postRegistration (uid:str, pin:str)
 
@@ -22,7 +28,7 @@ def postRegistration(url,uid, pin):
 	Returns:
 		response: A pass/fail signal (idc what the type is, just doc it)
 	"""
-	return ""
+	return 
 	
 def postPin(url,pin):
 	response = requests.post(url+"/tabs/getpin", data = {"pin":pin})
