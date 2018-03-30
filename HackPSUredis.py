@@ -20,6 +20,7 @@ def postRegistration(uid, pin):
 	Returns:
 		response: A pass/fail signal (idc what the type is, just doc it)
 	"""
+	return ""
 	
 def postPin(pin):
 	"""
@@ -34,6 +35,7 @@ def postPin(pin):
 		name: The user's first and last name as a string
 		size: The user's shirt size as a string
 	"""
+	return ("name","size")
 	
 def postScan(uid, timestamp, location):
 	"""
@@ -50,4 +52,4 @@ def postScan(uid, timestamp, location):
 	Returns:
 		result:	Something with at least 3 states for results, just doc their meanings
 	"""
-	
+	return ""

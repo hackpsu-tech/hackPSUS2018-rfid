@@ -73,12 +73,13 @@ except ImportError:
 
 #TODO: import all HackPSU abstraction modules
 #import hackpsuLCD as lcd
-import hackpsuRFID as rfid
-#import hackpsuKEYPAD as keypad
-import hackpsuREDIS as redis
-import hackpsuCONFIG as config
+import HackPSUrfid as rfid
+import HackPSUkeypad
+import HackPSUredis as redis
+import HackPSUconfig as config
 
 configurationDictionary = {"location":""}
+keypad = HackPSUkeypad()
 	
 #Funtion definitions for states (goto <lineNum> for init code)
 def launchScanner():
@@ -121,9 +122,8 @@ def launchRegistration():
 	while True:
 		uid = None
 		print("Enter 4 digit pin")
-		pin = ""
-		for i in range(4)
-			pin.join(keypad.getKey())
+		pin = keypad.getPin()
+		print("Pin: " pin)
 		(name, size) = redis.postPin(pin)
 		print("name: " + name)
 		print("size: " + size)
