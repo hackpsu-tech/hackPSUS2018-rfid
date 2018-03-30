@@ -101,7 +101,7 @@ def launchScanner():
 		#Tell redis who scanned, when, and where
 		timestamp = calendar.timegm(time.gmtime())
 		location = configurationDictionary["location"]
-		result = redis.postScan(uid, timestamp, location)
+		result = redis.postScan(configurationDictionary["redisLocation"], uid, timestamp, location)
 		lcd.printScan(result)
 		lastUID = uid
 		#Do we want to sleep/clear?
@@ -119,6 +119,7 @@ def launchLocationReader():
 		configurationDictionary["location"] = loc
 		lcd.printLocation(loc)
 		lastUID = uid
+		config.setProperties("pi.cfg", configurationDictionary)
 
 def launchRegistration():	
 	lastUID = None
@@ -127,7 +128,7 @@ def launchRegistration():
 		lcd.printMsg("Enter 4 digit pin")
 		pin = keypad.getPin()
 		lcd.printMsg("Pin: " pin)
-		(name, size) = redis.postPin(pin)
+		(name, size) = redis.postPin(configurationDictionary["redisLocation"], pin)
 		lcd.printname(name)
 		
 		key = None
@@ -144,7 +145,7 @@ def launchRegistration():
 			pass
 		lcd.printMsg("Scanned")
 		uid = rfid.getUID()
-		resp = redis.postRegistration(pin, uid)
+		resp = redis.postRegistration(configurationDictionary["redisLocation"], pin, uid)
 		printRegisterd(resp)
 		lastUID = uid
 		
