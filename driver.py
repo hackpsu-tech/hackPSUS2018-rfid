@@ -62,7 +62,7 @@ Fired     ||        Registration Interrupt Fired |                |
 
 import time
 import calendar
-import threaing
+import threading
 import logging
 
 try:
@@ -90,7 +90,7 @@ def launchScanner():
 		#Wait until band is detected
 		uid = None
 		lcd.printMsg("Waiting...")
-		while not rfid.detectBand()):
+		while not rfid.detectBand():
 			pass
 		lcd.printMsg("Detected Wristband")
 		#Get UID, skip scan if same as last
@@ -126,7 +126,7 @@ def launchRegistration():
 		uid = None
 		lcd.printMsg("Enter 4 digit pin")
 		pin = keypad.getPin()
-		lcd.printMsg("Pin: " pin)
+		lcd.printMsg("Pin: " + pin)
 		(name, size) = redis.postPin(pin)
 		lcd.printname(name)
 		
@@ -164,5 +164,5 @@ logging.basicConfig(filename='scanner.log', level=logging.DEBUG)
 
 #Launch into the scanner mode
 configurationDictionary = config.getProperties("pi.cfg")
-keypad = HackPSUkeypad()
-launchScanner()
+keypad = HackPSUkeypad.HackPSUkeypad()
+launchRegistration()

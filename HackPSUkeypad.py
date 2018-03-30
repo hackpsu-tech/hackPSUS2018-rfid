@@ -1,11 +1,12 @@
 import RPi.GPIO as GPIO
 import time
 
-GPIO.setmode(GPIO.BCM)
+#GPIO.setmode(GPIO.BCM)
+#Assume board layout
 keys=[['1','2','3','A'],['4','5','6','B'],['7','8','9','C'],['*','0','#','D']]
 
 class HackPSUkeypad():
-   def __init__(self, columns=[21,20,16,12], rows=[19,13,6,5]):
+   def __init__(self, columns=[40,38,36,32], rows=[35,33,31,29]):
       self.cols=columns
       self.rows=rows
       for col in columns:
