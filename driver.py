@@ -77,7 +77,7 @@ import HackPSUrfid as rfid
 import HackPSUkeypad
 import HackPSUredis as redis
 import HackPSUconfig as config
-import HackPSUfauxlcd as lcd
+import HackPSUlcd as lcd
 	
 def getWifi():
 	return "XXX%"
@@ -145,7 +145,7 @@ def launchRegistration():
 			pass
 		lcd.printMsg("Scanned")
 		uid = rfid.getUID()
-		resp = redis.postRegistration(configurationDictionary["redisLocation"], pin, uid)
+		resp = redis.postRegistration(configurationDictionary["redisLocation"], uid, pin)
 		lcd.printRegistered(resp)
 		lastUID = uid
 		
@@ -166,4 +166,4 @@ logging.basicConfig(filename='scanner.log', level=logging.DEBUG)
 #Launch into the scanner mode
 configurationDictionary = config.getProperties("pi.cfg")
 keypad = HackPSUkeypad.HackPSUkeypad()
-launchRegistration()
+launchScanner()
