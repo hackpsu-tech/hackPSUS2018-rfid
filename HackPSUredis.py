@@ -36,7 +36,7 @@ def postPin(url,pin):
 		name = data["data"]["name"]
 		return (name,shirt)
 	else:
-		return "Error"
+		return ("Error","Error")
 	"""
 	(name:str, size:str) postPin (pin:str)
 	
