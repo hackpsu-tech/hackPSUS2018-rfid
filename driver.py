@@ -124,6 +124,7 @@ def launchLocationReader():
 def launchRegistration():	
 	lastUID = None
 	while True:
+		print(str(GPIO.getmode()))
 		uid = None
 		lcd.printMsg("Enter 4 digit pin")
 		pin = keypad.getPin()
