@@ -8,7 +8,7 @@ Requires requests (pip install requests)
 import requests
 
 def postRegistration(url,uid, pin):
-	requests.post(url+"/tabs/setup", data={"uid": uid, "pin": pin})
+	r = requests.post(url+"/tabs/setup", data={"uid": uid, "pin": pin})
 	code = r.status_code
 
 	if code == "200":
