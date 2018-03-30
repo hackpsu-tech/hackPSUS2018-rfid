@@ -7,9 +7,11 @@ Requires requests (pip install requests)
 """
 import requests
 
-def postRegistration(uid, pin):
+def postRegistration(url,uid, pin):
+	requests.post(url+"/tabs/setup", data={"uid": uid, "pin": pin})
 	"""
 	(response:?) postRegistration (uid:str, pin:str)
+
 	
 	Associate a UID with a pin in the server to register a user
 	
@@ -22,7 +24,13 @@ def postRegistration(uid, pin):
 	"""
 	return ""
 	
-def postPin(pin):
+def postPin(url,pin):
+	responseName = requests.get(url+"/tabs/name")
+	responseShirt = requests.get(url+"/tabs/shirtSize")
+	dataName = responseName.json()
+	dataShirt = repsonseShirt.json()
+	name = dataName["data"]
+	size = dataShirt["data"]
 	"""
 	(name:str, size:str) postPin (pin:str)
 	
@@ -35,9 +43,16 @@ def postPin(pin):
 		name: The user's first and last name as a string
 		size: The user's shirt size as a string
 	"""
-	return ("name","size")
+	return (name,size)
 	
-def postScan(uid, timestamp, location):
+def postScan(url,uid, timestamp, location):
+	r = requests.post(url+"/tabs/add", data={"uid": uid, "timestamp": timestamp, "location":location})
+	code = r.status_code
+
+	if code == "200":
+		return "Y"
+	else:
+		return "N"
 	"""
 	(result:?) postScan (uid:str, timestamp:float, location:str)
 	
@@ -52,4 +67,3 @@ def postScan(uid, timestamp, location):
 	Returns:
 		result:	Something with at least 3 states for results, just doc their meanings
 	"""
-	return "Y/N"
