@@ -90,13 +90,17 @@ def launchScanner():
 		#Wait until band is detected
 		uid = None
 		lcd.printMsg("Waiting...")
+		#Wait for a wristband
 		while not rfid.detectBand():
 			pass
+		#Once we have one, go
 		lcd.printMsg("Detected Wristband")
 		#Get UID, skip scan if same as last
 		uid = rfid.getUID()
-		if uid is lastUID:
+		#Pls no let multiple scans happen 
+		if uid == lastUID:
 			continue
+		print(uid)
 		lcd.printMsg("Scanned Wristband")
 		#Tell redis who scanned, when, and where
 		timestamp = calendar.timegm(time.gmtime())
@@ -167,4 +171,4 @@ logging.basicConfig(filename='scanner.log', level=logging.DEBUG)
 #Launch into the scanner mode
 configurationDictionary = config.getProperties("pi.cfg")
 keypad = HackPSUkeypad.HackPSUkeypad()
-launchRegistration()
+launchScanner()
