@@ -89,12 +89,12 @@ def launchScanner():
 		lcd.printDebug(configurationDictionary["location"], getWifi())
 		#Wait until band is detected
 		uid = None
-		lcd.printMsg("Waiting...")
 		#Wait for a wristband
 		while not rfid.detectBand():
 			pass
 		#Once we have one, go
-		lcd.printMsg("Detected Wristband")
+		#If it stops here, restart the program
+		lcd.printMsg("Scanning...")
 		#Get UID, skip scan if same as last
 		uid = rfid.getUID()
 		#Pls no let multiple scans happen 
@@ -109,6 +109,7 @@ def launchScanner():
 		lcd.printScan(result)
 		lastUID = uid
 		#Do we want to sleep/clear?
+		time.sleep(1)
 
 def launchLocationReader():
 	lastUID = None

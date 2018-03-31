@@ -55,9 +55,12 @@ def postScan(url,uid, timestamp, location):
 	r = requests.post(url+"/tabs/add", data={"id": uid, "timestamp": timestamp, "location":location})
 
 	if r.status_code == requests.codes.ok:
-		return "Y"
+		if not r.json()["data"]["isRepeat"]:
+			return "Y"
+		else:
+			return "N"
 	else:
-		return "N"
+		return "X"
 	"""
 	(result:?) postScan (uid:str, timestamp:float, location:str)
 	
