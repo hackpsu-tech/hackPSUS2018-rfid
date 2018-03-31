@@ -124,8 +124,9 @@ def launchLocationReader():
 def launchRegistration():	
 	lastUID = None
 	while True:
+		lcd.printDebug(configurationDictionary["location"], getWifi())
 		uid = None
-		lcd.printMsg("Enter 4 digit pin")
+		lcd.printMsg("Enter Pin")
 		pin = keypad.getPin()
 		lcd.printMsg("Pin: " + pin)
 		(name, size) = redis.postPin(configurationDictionary["redisLocation"], pin)
@@ -166,4 +167,4 @@ logging.basicConfig(filename='scanner.log', level=logging.DEBUG)
 #Launch into the scanner mode
 configurationDictionary = config.getProperties("pi.cfg")
 keypad = HackPSUkeypad.HackPSUkeypad()
-launchScanner()
+launchRegistration()
