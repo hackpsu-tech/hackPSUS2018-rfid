@@ -54,8 +54,8 @@ def getUID():
 	while not (status == reader.MI_OK):
 		(status,TagType) = reader.MFRC522_Request(reader.PICC_REQIDL)
 	(status, uid) = reader.MFRC522_Anticoll()
-	if not (status == reader.MI_OK):
-		raise ValueError('No rfid tag detected')
+	while not status == reader.MI_OK:
+		(status, uid) = reader.MFRC522_Anticoll()
 	value = "{uid1},{uid2},{uid3},{uid4}".format(uid1=uid[0], uid2=uid[1], uid3=uid[2], uid4=uid[3])
 	return value
 

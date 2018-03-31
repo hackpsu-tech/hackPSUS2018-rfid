@@ -90,13 +90,17 @@ def launchScanner():
 		#Wait until band is detected
 		uid = None
 		lcd.printMsg("Waiting...")
+		#Wait for a wristband
 		while not rfid.detectBand():
 			pass
+		#Once we have one, go
 		lcd.printMsg("Detected Wristband")
 		#Get UID, skip scan if same as last
 		uid = rfid.getUID()
-		if uid is lastUID:
+		#Pls no let multiple scans happen 
+		if uid == lastUID:
 			continue
+		print(uid)
 		lcd.printMsg("Scanned Wristband")
 		#Tell redis who scanned, when, and where
 		timestamp = calendar.timegm(time.gmtime())
@@ -124,8 +128,9 @@ def launchLocationReader():
 def launchRegistration():	
 	lastUID = None
 	while True:
+		lcd.printDebug(configurationDictionary["location"], getWifi())
 		uid = None
-		lcd.printMsg("Enter 4 digit pin")
+		lcd.printMsg("Enter Pin")
 		pin = keypad.getPin()
 		lcd.printMsg("Pin: " + pin)
 		(name, size) = redis.postPin(configurationDictionary["redisLocation"], pin)
