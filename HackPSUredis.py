@@ -1,12 +1,18 @@
 """
 HackPSU Abstractions for communicating with the Redis cache via http using requests
 
+@Julia please implement this bitch and maybe doc your method up here and put the redis url up here?
+
 Requires requests (pip install requests)
 """
 import requests
 
 def postRegistration(url,uid, pin):
-	requests.post(url+"/tabs/setup", data={"uid": uid, "pin": pin})
+	r = requests.post(url+"/tabs/setup", data={"id": uid, "pin": pin})
+	if r.status_code == requests.codes.ok :
+		return "Y"
+	else:
+		return "N"
 	"""
 	(response:?) postRegistration (uid:str, pin:str)
 
@@ -20,18 +26,17 @@ def postRegistration(url,uid, pin):
 	Returns:
 		response: A pass/fail signal (idc what the type is, just doc it)
 	"""
-	return ""
+	return 
 	
 def postPin(url,pin):
-	repsonse = requests.post(url+"/tabs/getpin", data = {"pin":pin})
+	response = requests.post(url+"/tabs/getpin", data = {"pin":pin})
 	data = response.json()
-	status = response.status_code
-	if status == "500":
-		return "Error"
-	else:
-		shirt = data["data"]["shirtShirt"]
+	if response.status_code == requests.codes.ok:
+		shirt = data["data"]["shirtSize"]
 		name = data["data"]["name"]
-		return (name,size)
+		return (name,shirt)
+	else:
+		return ("Error","Error")
 	"""
 	(name:str, size:str) postPin (pin:str)
 	
@@ -47,10 +52,9 @@ def postPin(url,pin):
 	
 	
 def postScan(url,uid, timestamp, location):
-	r = requests.post(url+"/tabs/add", data={"uid": uid, "timestamp": timestamp, "location":location})
-	code = r.status_code
+	r = requests.post(url+"/tabs/add", data={"id": uid, "timestamp": timestamp, "location":location})
 
-	if code == "200":
+	if r.status_code == requests.codes.ok:
 		return "Y"
 	else:
 		return "N"
