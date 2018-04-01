@@ -1,7 +1,19 @@
 # HackPSU Wristband Scanner
 This repository hosts the Pyhton code used by the RaspberryPi RFID Wristband scanner.  Code found in this repository is dependent on code from other GitHub repositories.  Please see the docstring at the top of each Python file for a complete list of requirements for each module.  This repository also assumes that you have access to a server compatible with the HackPSU Redis Cache Server, which will be discussed later.
 
-TABLE OF CONTENTS
+* [Provided Software](#provided-software)
+  * [driver.py](#driverpy)
+  * [writer.py](#writerpy)
+  * [test_programs/configwriter.py](test_programs/configwriterpy)
+  * [test_programs/configreader.py](test_programs/configreaderpy)
+* [Intended Use Case](#intended-use-case)
+* [Hardware Setup](#hardware-setup)
+* [Python Modules](#python-modules)
+  * [HackPSUconfig](#hackpsuconfig)
+  * [HackPSUfauxlcd](#hackpsufauxlcd)
+  * [HackPSUlcd](#hackpsulcd)
+  * [HackPSUredis](#hackpsuredis)
+  * [HackPSUrfid](#hackpsurfid)
 
 ## Provided Software
 This repository provides four executable scripts as well as several Python modules for use with the RaspberryPi.  
