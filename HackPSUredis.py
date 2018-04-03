@@ -54,13 +54,16 @@ def postPin(url,pin):
 def postScan(url,uid, timestamp, location):
 	r = requests.post(url+"/tabs/add", data={"id": uid, "timestamp": timestamp, "location":location})
 
+	diet = ""
 	if r.status_code == requests.codes.ok:
+		if not (r.json()["data"]["diet"] == "NULL"):
+			diet = " WARN DIET"
 		if not r.json()["data"]["isRepeat"]:
-			return "Y"
+			return "Y" + diet
 		else:
-			return "N"
+			return "N" = diet
 	else:
-		return "X"
+		return "X" + diet
 	"""
 	(result:?) postScan (uid:str, timestamp:float, location:str)
 	
