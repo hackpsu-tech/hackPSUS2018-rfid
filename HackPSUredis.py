@@ -61,7 +61,7 @@ def postScan(url,uid, timestamp, location):
 		if not r.json()["data"]["isRepeat"]:
 			return "Y" + diet
 		else:
-			return "N" = diet
+			return "N" + diet
 	else:
 		return "X" + diet
 	"""
