@@ -161,6 +161,7 @@ while True:
 		uid = rfid.getUID()
 		resp = redis.postRegistration(configurationDictionary["redisLocation"], uid, pin)
 		lcd.printRegistered(resp)
+		time.sleep(1)
 		lastUID = uid
 	else:
 		print("Location Mode")
