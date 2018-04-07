@@ -80,15 +80,15 @@ import HackPSUconfig as config
 import HackPSUlcd as lcd
 	
 global state 
-state = 0
+state = 1
 
 def getWifi():
 	return "XXX%"
 		
 def advanceState(dummy):
-	print("STATE " + str(state))
 	global state
-	state = state + 1
+	state = (state + 1)%3
+	print("STATE " + str(state))
 
 #Prevent warnings from reusing IO ports
 GPIO.setwarnings(False)
@@ -112,6 +112,7 @@ keypad = HackPSUkeypad.HackPSUkeypad()
 lastUID = None
 while True:
 	if state == 0:
+		print("Scanner mode")
 		lcd.printDebug(configurationDictionary["location"], getWifi())
 		#Wait until band is detected
 		uid = None
@@ -135,6 +136,7 @@ while True:
 		lcd.printScan(result)
 		lastUID = uid
 	elif state == 1:
+		print("Registration mode")
 		lcd.printDebug(configurationDictionary["location"], getWifi())
 		uid = None
 		lcd.printMsg("Enter Pin")
@@ -147,7 +149,7 @@ while True:
 		while not (key == "#" or key == "*"):
 			key = keypad.getKey()
 			
-		if key == "#":
+		if key == "*":
 			continue
 		
 		lcd.printDebug(configurationDictionary["location"], getWifi())
@@ -161,6 +163,7 @@ while True:
 		lcd.printRegistered(resp)
 		lastUID = uid
 	else:
+		print("Location Mode")
 		lcd.printDebug(configurationDictionary["location"], getWifi())
 		uid = None
 		lcd.printMsg("Waiting...")
