@@ -35,15 +35,15 @@ class HackPSUkeypad():
          time.sleep(0.1)
    def getVal(self, col, row):
       return keys[self.rows.index(row)][self.cols.index(col)]
-   def getPin(self, length=3):
+   def getPin(self):
       vals=''
-      while len(vals) < length:
+      while True:
          key=self.getKey()
+         print(str(key))
          if key=='#':
-            vals=vals[:-1]
+            break
          elif key == '*':
             vals=""
          else:
-            #print key
             vals+=key
       return vals

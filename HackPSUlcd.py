@@ -16,7 +16,6 @@ def printDebug(location, wifi):
 def printName(name):
 	MY_LCD.lcd_clear()
 	MY_LCD.lcd_display_string(name, DEBUG_ROW)
-	MY_LCD.lcd_display_string("#: Retry, *:Go", DATA_ROW)
 
 def printSize(size):
 	MY_LCD.lcd_clear()
@@ -29,7 +28,7 @@ def printScan(goodScan):
 def printLocation(location):
 	MY_LCD.lcd_clear()
 	MY_LCD.lcd_display_string("Location: " + location, DATA_ROW)
-	
+
 def printRegistered(registered):
 	MY_LCD.lcd_clear()
 	MY_LCD.lcd_display_string("Registered: " + registered, DATA_ROW)
@@ -37,3 +36,5 @@ def printRegistered(registered):
 def printMsg(msg):
 	MY_LCD.lcd_clear()
 	MY_LCD.lcd_display_string(msg, DATA_ROW)
+
+
