@@ -156,7 +156,7 @@ def launchRegistration():
 		lcd.printMsg("Pin: " + pin)
 		(name, size) = redis.postPin(configurationDictionary["redisLocation"], pin)
 		lcd.printName(name)
-		
+		lcd.printMsg("#=Sub, *=Clear")
 		key = None
 		while not (key == "#" or key == "*"):
 			key = keypad.getKey()

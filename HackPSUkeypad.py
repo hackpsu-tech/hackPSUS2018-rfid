@@ -39,6 +39,7 @@ class HackPSUkeypad():
       vals=''
       while True:
          key=self.getKey()
+         print(str(key))
          if key=='#':
             break
          elif key == '*':
