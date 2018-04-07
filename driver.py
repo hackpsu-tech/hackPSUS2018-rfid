@@ -79,11 +79,17 @@ import HackPSUredis as redis
 import HackPSUconfig as config
 import HackPSUlcd as lcd
 	
+global state 
+state = 0
+
 def getWifi():
 	return "XXX%"
 	
 #Funtion definitions for states (goto <lineNum> for init code)
 def launchScanner():
+	lcd.printMsg("SCANNER MODE")
+	print("SCAN PLS")
+	time.sleep(1)
 	lastUID = None
 	while True:
 		lcd.printDebug(configurationDictionary["location"], getWifi())
@@ -110,8 +116,15 @@ def launchScanner():
 		lastUID = uid
 		#Do we want to sleep/clear?
 		time.sleep(1)
+		if state == 1:
+			launchRegistration()
+		if state == 2:
+			launchLocationReader()
 
 def launchLocationReader():
+	lcd.printMsg("LOCATION MODE")
+	print("LOCATION PLS")
+	time.sleep(1)
 	lastUID = None
 	while True:
 		lcd.printDebug(configurationDictionary["location"], getWifi())
@@ -125,8 +138,15 @@ def launchLocationReader():
 		lcd.printLocation(loc)
 		lastUID = uid
 		config.setProperties("pi.cfg", configurationDictionary)
+		if state == 2:
+                        launchLocationReader()
+                if state == 0:
+			launchScanner()
 
 def launchRegistration():	
+	lcd.printMsg("REGISTRATION")
+	print("REGISTER PLS")
+	time.sleep(1)
 	lastUID = None
 	while True:
 		lcd.printDebug(configurationDictionary["location"], getWifi())
@@ -154,7 +174,22 @@ def launchRegistration():
 		resp = redis.postRegistration(configurationDictionary["redisLocation"], uid, pin)
 		lcd.printRegistered(resp)
 		lastUID = uid
+		if state == 1:
+                        launchRegistration()
+                if state == 0:
+                        launchScanner()
 		
+def advanceState(dummy):
+	print("STATE " + str(state))
+	global state
+	state = state + 1
+	if state == 0:
+		launchScanner()
+	elif state == 1:
+		launchRegistration()
+	else:
+		launchLocationReader()
+
 #Prevent warnings from reusing IO ports
 GPIO.setwarnings(False)
 
@@ -164,7 +199,8 @@ logging.basicConfig(filename='scanner.log', level=logging.DEBUG)
 	
 #TODO
 #register mode switch interrupts
-#GPIO.add_event_detect(pin, rising/falling edge, handlerFunction)
+GPIO.setup(13, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)    # set GPIO25 as input (button)  
+GPIO.add_event_detect(13, GPIO.RISING, callback=advanceState)
 
 #TODO
 #Load information from config file
